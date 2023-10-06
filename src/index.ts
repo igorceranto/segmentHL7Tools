@@ -1,5 +1,3 @@
-export function teste() {
-  console.log('teste')
+export function teste(value: string) {
+  return value
 }
-
-teste()
