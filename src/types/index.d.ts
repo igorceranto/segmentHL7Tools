@@ -1,0 +1,3 @@
+interface IIndex {
+  value: string
+}

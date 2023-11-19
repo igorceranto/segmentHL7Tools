@@ -1,3 +1,3 @@
-export function teste(value: string) {
+export function teste({ value }: IIndex) {
   return value
 }
