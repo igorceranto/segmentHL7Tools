@@ -2,21 +2,46 @@
   "name": "segmenthl7tools",
   "version": "1.0.2",
   "description": "Ferramentas para manipulação de segmentos HL7",
-  "main": "build/index.js",
-  "typescript": "5.2.2",
-  "scripts": {
-    "build": "tsup src --out-dir build",
-    "start:dev": "tsx watch src/index.ts",
-    "start": "node build/index.js",
-    "release": "release-it"
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
-  "author": "ICeranto",
-  "license": "ISC",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "type-check": "tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "release": "release-it",
+    "prepare": "husky install",
+    "biome:format": "npx @biomejs/biome format --write ./src",
+    "biome:lint": "npx @biomejs/biome lint ./src",
+    "biome:check": "npx @biomejs/biome check ./src"
+  },
   "keywords": [
     "hl7",
     "segment",
+    "healthcare",
+    "medical",
+    "interoperability",
     "segmenthl7tools"
   ],
+  "author": "ICeranto",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/igorceranto/segmentHL7Tools"
@@ -24,16 +49,20 @@
   "bugs": {
     "url": "https://github.com/igorceranto/segmentHL7Tools/issues"
   },
+  "homepage": "https://github.com/igorceranto/segmentHL7Tools#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "devDependencies": {
-    "@rocketseat/eslint-config": "2.1.0",
-    "@types/node": "20.8.2",
-    "@vitest/coverage-v8": "0.34.6",
-    "@vitest/ui": "0.34.6",
-    "eslint": "8.50.0",
-    "release-it": "17.0.0",
-    "tsup": "7.2.0",
-    "tsx": "3.13.0",
-    "typescript": "5.2.2",
-    "vitest": "0.34.6"
+    "@biomejs/biome": "2.1.4",
+    "@types/node": "^20.8.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "husky": "8.0.3",
+    "release-it": "^19.0.4",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.2.2",
+    "vitest": "^3.2.4"
   }
 }

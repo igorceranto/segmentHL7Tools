@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🎨 Formatando código com Biome..."
+npm run biome:format
+
+echo "🔍 Executando linting com Biome..."
+npm run biome:lint
+
+echo "🔍 Executando verificação de tipos..."
+npm run type-check
+
+echo "🧪 Executando testes..."
+npm test
+
+echo "✅ Pre-commit checks passaram com sucesso!"
