@@ -1,6 +1,6 @@
 {
   "name": "segmenthl7tools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Ferramentas para manipulação de segmentos HL7",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
