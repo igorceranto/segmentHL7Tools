@@ -2,34 +2,18 @@
   "git": {
     "commitMessage": "chore: release v{version}",
     "tagName": "v{version}",
-    "push": true,
-    "requireUpstream": false
+    "push": true
   },
   "github": {
     "release": true,
-    "releaseName": "Release v{version}",
-    "assets": [
-      "dist/*.js",
-      "dist/*.d.ts",
-      "dist/*.map"
-    ],
-    "draft": false,
-    "prerelease": false
+    "releaseName": "Release v{version}"
   },
   "npm": {
     "publish": true,
     "access": "public"
   },
   "hooks": {
-    "before:init": [
-      "npm run biome:format",
-      "npm run biome:lint",
-      "npm run type-check",
-      "npm test",
-      "npm run build"
-    ],
+    "before:init": "npm run build",
     "after:release": "echo 'Release v{version} publicado com sucesso!'"
-  },
-  "increment": "patch",
-  "requireUpstream": false
+  }
 }
