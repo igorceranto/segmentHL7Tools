@@ -32,7 +32,7 @@ jobs:
       run: npm run biome:lint
 
     - name: Check formatting
-      run: npm run biome:format -- --check
+      run: npm run biome:format:check
 
     - name: Type check
       run: npm run type-check
