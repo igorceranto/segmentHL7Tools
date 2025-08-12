@@ -1,12 +1,12 @@
 {
   "git": {
-    "commitMessage": "chore: release v{version}",
-    "tagName": "v{version}",
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
     "push": true
   },
   "github": {
     "release": true,
-    "releaseName": "Release v{version}"
+    "releaseName": "Release v${version}"
   },
   "npm": {
     "publish": true,
@@ -14,6 +14,6 @@
   },
   "hooks": {
     "before:init": "npm run build",
-    "after:release": "echo 'Release v{version} publicado com sucesso!'"
+    "after:release": "echo 'Release v${version} publicado com sucesso!'"
   }
 }
