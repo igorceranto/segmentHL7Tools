@@ -23,7 +23,7 @@
         "noUnusedVariables": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "error"
       },
       "style": {
         "useConst": "error"
@@ -35,7 +35,7 @@
       "enabled": true,
       "quoteStyle": "single",
       "trailingCommas": "es5",
-      "semicolons": "always"
+      "semicolons": "asNeeded"
     }
   }
 }
