@@ -1,18 +1,12 @@
 // Exportar todas as funções organizadas por responsabilidade
-export {
-  parseHL7Segment,
-  createHL7Segment
-} from './parser'
-
-export {
-  validateHL7Segment
-} from './validation'
 
 export {
   extractFieldValue,
-  setFieldValue
+  setFieldValue,
 } from './field-operations'
-
 export {
-  teste
-} from './utils'
+  createHL7Segment,
+  parseHL7Segment,
+} from './parser'
+export { teste } from './utils'
+export { validateHL7Segment } from './validation'
