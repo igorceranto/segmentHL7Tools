@@ -1,8 +1,19 @@
 const SEGMENT_TYPE_REGEX = /^[A-Z0-9]{3}$/
 
 /**
- * Valida se uma string é um segmento HL7 válido.
- * O tipo do segmento deve ter exatamente 3 caracteres alfanuméricos maiúsculos.
+ * Remove o terminador de segmento HL7 (\r, carriage return 0x0D) e
+ * espaços em branco nas extremidades, conforme HL7 v2 spec cap. 2.
+ */
+export function normalizeSegment(segment: string): string {
+  return segment.trim().replace(/\r$/, '').trimEnd()
+}
+
+/**
+ * Valida se uma string é um segmento HL7 v2 bem formado.
+ * O tipo do segmento deve ter exatamente 3 caracteres alfanuméricos maiúsculos
+ * conforme HL7 v2.8.2 §2.5.2: /^[A-Z0-9]{3}$/.
+ * Segmentos Z (ZPD, ZAL, etc.) são aceitos como extensões locais.
+ * O terminador \r e espaços nas extremidades são ignorados antes da validação.
  * @param segment - String do segmento HL7
  * @returns true se o segmento for válido, false caso contrário
  */
@@ -11,8 +22,10 @@ export function validateHL7Segment(segment: string): boolean {
     return false
   }
 
-  const pipeIndex = segment.indexOf('|')
-  const segmentType = pipeIndex === -1 ? segment : segment.slice(0, pipeIndex)
+  const normalized = normalizeSegment(segment)
+  const pipeIndex = normalized.indexOf('|')
+  const segmentType =
+    pipeIndex === -1 ? normalized : normalized.slice(0, pipeIndex)
 
   return SEGMENT_TYPE_REGEX.test(segmentType)
 }

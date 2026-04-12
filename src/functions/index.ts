@@ -6,4 +6,4 @@ export {
   createHL7Segment,
   parseHL7Segment,
 } from './parser'
-export { validateHL7Segment } from './validation'
+export { normalizeSegment, validateHL7Segment } from './validation'
