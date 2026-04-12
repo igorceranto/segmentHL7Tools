@@ -1,5 +1,8 @@
+const SEGMENT_TYPE_REGEX = /^[A-Z0-9]{3}$/
+
 /**
- * Valida se uma string é um segmento HL7 válido
+ * Valida se uma string é um segmento HL7 válido.
+ * O tipo do segmento deve ter exatamente 3 caracteres alfanuméricos maiúsculos.
  * @param segment - String do segmento HL7
  * @returns true se o segmento for válido, false caso contrário
  */
@@ -8,7 +11,8 @@ export function validateHL7Segment(segment: string): boolean {
     return false
   }
 
-  // Verifica se tem pelo menos o tipo de segmento
-  const parts = segment.split('|')
-  return parts.length >= 1 && parts[0] !== undefined && parts[0].length > 0
+  const pipeIndex = segment.indexOf('|')
+  const segmentType = pipeIndex === -1 ? segment : segment.slice(0, pipeIndex)
+
+  return SEGMENT_TYPE_REGEX.test(segmentType)
 }
