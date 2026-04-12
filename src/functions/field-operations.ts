@@ -1,10 +1,12 @@
 import { validateHL7Segment } from './validation'
 
 /**
- * Extrai o valor de um campo específico de um segmento HL7
+ * Extrai o valor de um campo específico de um segmento HL7.
+ * Retorna string vazia para campos que existem mas estão vazios,
+ * e null apenas para índices fora do range do segmento.
  * @param segment - String do segmento HL7
- * @param fieldIndex - Índice do campo a ser extraído
- * @returns Valor do campo ou null se não existir
+ * @param fieldIndex - Índice do campo (0 = segmentType)
+ * @returns Valor do campo, string vazia se vazio, ou null se não existir
  */
 export function extractFieldValue(
   segment: string,
@@ -15,11 +17,17 @@ export function extractFieldValue(
   }
 
   const fields = segment.split('|')
-  return fields[fieldIndex] || null
+
+  if (fieldIndex >= fields.length) {
+    return null
+  }
+
+  return fields[fieldIndex] ?? null
 }
 
 /**
- * Define o valor de um campo específico em um segmento HL7
+ * Define o valor de um campo específico em um segmento HL7.
+ * Preenche campos intermediários com strings vazias se necessário.
  * @param segment - String do segmento HL7
  * @param fieldIndex - Índice do campo a ser modificado
  * @param value - Novo valor para o campo
@@ -40,7 +48,6 @@ export function setFieldValue(
 
   const fields = segment.split('|')
 
-  // Preenche campos vazios se necessário
   while (fields.length <= fieldIndex) {
     fields.push('')
   }

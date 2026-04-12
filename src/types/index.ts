@@ -1,2 +1,1 @@
-export * from './common'
-export * from './hl7'
+export type { HL7Segment, ParsedHL7Segment } from './hl7'

@@ -38,14 +38,16 @@ console.log('')
 // Exemplo 3: Validar segmentos
 console.log('3. Validação de segmentos:')
 const validSegment = 'MSH|^~\\&|APP|FACILITY'
-const invalidSegment = ''
-const invalidSegment2 = '|APP|FACILITY'
+const invalidEmpty = ''
+const invalidNoType = '|APP|FACILITY'
+const invalidShortType = 'AB|APP|FACILITY'
 
 console.log(`"${validSegment}" é válido:`, validateHL7Segment(validSegment))
-console.log(`"${invalidSegment}" é válido:`, validateHL7Segment(invalidSegment))
+console.log(`"${invalidEmpty}" é válido:`, validateHL7Segment(invalidEmpty))
+console.log(`"${invalidNoType}" é válido:`, validateHL7Segment(invalidNoType))
 console.log(
-  `"${invalidSegment2}" é válido:`,
-  validateHL7Segment(invalidSegment2)
+  `"${invalidShortType}" é válido:`,
+  validateHL7Segment(invalidShortType)
 )
 console.log('')
 
