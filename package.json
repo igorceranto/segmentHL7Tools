@@ -28,7 +28,7 @@
     "type-check": "tsc --noEmit",
     "prepublishOnly": "npm run build",
     "release": "release-it",
-    "prepare": "husky install",
+    "prepare": "husky",
     "biome:format": "npx @biomejs/biome format --write ./src",
     "biome:format:check": "npx @biomejs/biome format --check ./src",
     "biome:lint": "npx @biomejs/biome lint ./src",
@@ -56,15 +56,15 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.2",
-    "@types/node": "^20.8.2",
-    "@vitest/coverage-v8": "^3.2.4",
-    "@vitest/ui": "^3.2.4",
-    "husky": "8.0.3",
-    "release-it": "^19.0.4",
-    "tsup": "^8.5.0",
-    "tsx": "^4.20.3",
-    "typescript": "^5.2.2",
-    "vitest": "^3.2.4"
+    "@biomejs/biome": "2.4.11",
+    "@types/node": "20.19.39",
+    "@vitest/coverage-v8": "4.1.4",
+    "@vitest/ui": "4.1.4",
+    "husky": "9.1.7",
+    "release-it": "19.2.4",
+    "tsup": "8.5.1",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.4"
   }
 }
