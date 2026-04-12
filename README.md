@@ -1,6 +1,36 @@
 # segmentHL7Tools
 
-Ferramentas para manipulação de segmentos HL7 (Health Level 7) em TypeScript/JavaScript.
+<p align="center">
+  <a href="https://www.npmjs.com/package/segmenthl7tools"><img src="https://img.shields.io/npm/v/segmenthl7tools?color=cb3837&label=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/segmenthl7tools"><img src="https://img.shields.io/npm/dm/segmenthl7tools?color=cb3837" alt="npm downloads" /></a>
+  <a href="https://github.com/igorceranto/segmentHL7Tools/actions/workflows/ci.yml"><img src="https://github.com/igorceranto/segmentHL7Tools/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://codecov.io/gh/igorceranto/segmentHL7Tools"><img src="https://codecov.io/gh/igorceranto/segmentHL7Tools/branch/main/graph/badge.svg" alt="Coverage" /></a>
+  <a href="https://github.com/igorceranto/segmentHL7Tools/blob/main/LICENSE"><img src="https://img.shields.io/github/license/igorceranto/segmentHL7Tools" alt="License" /></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.x-3178c6?logo=typescript&logoColor=white" alt="TypeScript" /></a>
+</p>
+
+<p align="center">
+  Ferramentas leves para parsear, criar, validar e manipular segmentos HL7 v2.x em TypeScript e JavaScript.
+</p>
+
+---
+
+## Sumário
+
+- [Instalação](#instalação)
+- [Início Rápido](#início-rápido)
+- [API](#api)
+  - [parseHL7Segment](#parsehl7segment)
+  - [createHL7Segment](#createhl7segment)
+  - [validateHL7Segment](#validatehl7segment)
+  - [extractFieldValue](#extractfieldvalue)
+  - [setFieldValue](#setfieldvalue)
+  - [Tipos](#tipos)
+- [Desenvolvimento](#desenvolvimento)
+- [Contribuição](#contribuição)
+- [Licença](#licença)
+
+---
 
 ## Instalação
 
@@ -8,211 +38,224 @@ Ferramentas para manipulação de segmentos HL7 (Health Level 7) em TypeScript/J
 npm install segmenthl7tools
 ```
 
-## Uso
-
-### Importação
-
-```typescript
-// ES Modules
-import { parseHL7Segment, createHL7Segment, validateHL7Segment, extractFieldValue, setFieldValue } from 'segmenthl7tools';
-
-// CommonJS
-const { parseHL7Segment, createHL7Segment, validateHL7Segment, extractFieldValue, setFieldValue } = require('segmenthl7tools');
+```bash
+yarn add segmenthl7tools
 ```
 
-### Exemplos de Uso
-
-#### Parsear um segmento HL7
-
-```typescript
-import { parseHL7Segment } from 'segmenthl7tools';
-
-const segment = "MSH|^~\\&|SENDING_APP|SENDING_FACILITY|RECEIVING_APP|RECEIVING_FACILITY|20231201120000||ADT^A01|MSG00001|P|2.5";
-const parsed = parseHL7Segment(segment);
-
-console.log(parsed.segmentType); // "MSH"
-console.log(parsed.field1);      // "^~\\&"
-console.log(parsed.field8);      // "ADT^A01"
-console.log(parsed.field11);     // "2.5"
+```bash
+pnpm add segmenthl7tools
 ```
 
-#### Criar um segmento HL7
+> Requer **Node.js >= 20**. Compatível com ES Modules e CommonJS.
+
+---
+
+## Início Rápido
 
 ```typescript
-import { createHL7Segment } from 'segmenthl7tools';
+import {
+  parseHL7Segment,
+  createHL7Segment,
+  validateHL7Segment,
+  extractFieldValue,
+  setFieldValue,
+} from 'segmenthl7tools'
 
-const segment = createHL7Segment("PID", ["1", "12345", "SMITH^JOHN", "19800101", "M"]);
-console.log(segment);
-// Output: "PID|1|12345|SMITH^JOHN|19800101|M"
+// Parsear um segmento
+const parsed = parseHL7Segment('PID|1|12345|SMITH^JOHN|19800101|M')
+console.log(parsed.segmentType) // "PID"
+console.log(parsed.field3)      // "SMITH^JOHN"
+
+// Criar um segmento
+const segment = createHL7Segment('PID', ['1', '12345', 'SMITH^JOHN'])
+console.log(segment) // "PID|1|12345|SMITH^JOHN"
+
+// Validar
+console.log(validateHL7Segment('MSH|^~\\&|APP|FAC')) // true
+console.log(validateHL7Segment(''))                    // false
+
+// Extrair campo
+console.log(extractFieldValue('PID|1|12345', 2)) // "12345"
+console.log(extractFieldValue('PID|1|12345', 9)) // null
+
+// Modificar campo
+console.log(setFieldValue('PID|1|12345|SMITH^JOHN', 2, '99999'))
+// "PID|1|99999|SMITH^JOHN"
 ```
 
-#### Validar um segmento HL7
+---
 
-O segmentType deve ter exatamente 3 caracteres alfanuméricos maiúsculos (ex: `MSH`, `PID`, `PV1`).
+## API
+
+### `parseHL7Segment`
 
 ```typescript
-import { validateHL7Segment } from 'segmenthl7tools';
-
-console.log(validateHL7Segment("MSH|^~\\&|APP|FACILITY")); // true
-console.log(validateHL7Segment("PID|1|12345"));             // true
-console.log(validateHL7Segment(""));                         // false
-console.log(validateHL7Segment("|APP|FACILITY"));            // false — sem tipo
-console.log(validateHL7Segment("AB|campo"));                 // false — tipo com 2 chars
-console.log(validateHL7Segment("pid|campo"));                // false — tipo em minúsculas
+parseHL7Segment(segment: string): ParsedHL7Segment
 ```
 
-#### Extrair valor de um campo específico
-
-Retorna `''` para campos que existem mas estão vazios, e `null` apenas quando o índice está além do range.
+Parseia um segmento HL7 e retorna um objeto com `segmentType` e os campos indexados como `field1`, `field2`, ..., `fieldN`.
 
 ```typescript
-import { extractFieldValue } from 'segmenthl7tools';
+const result = parseHL7Segment(
+  'MSH|^~\\&|SENDING_APP|SENDING_FAC||RECEIVING_FAC|20231201||ADT^A01|MSG001|P|2.5'
+)
 
-const segment = "PID|1|12345|SMITH^JOHN||M";
-
-console.log(extractFieldValue(segment, 0)); // "PID"
-console.log(extractFieldValue(segment, 1)); // "1"
-console.log(extractFieldValue(segment, 3)); // "SMITH^JOHN"
-console.log(extractFieldValue(segment, 4)); // "" — campo vazio
-console.log(extractFieldValue(segment, 9)); // null — fora do range
+result.segmentType // "MSH"
+result.field1      // "^~\\&"
+result.field8      // "ADT^A01"
+result.field11     // "2.5"
 ```
 
-#### Definir valor de um campo específico
+> Lança `Error` se o argumento não for uma string válida.
+
+---
+
+### `createHL7Segment`
 
 ```typescript
-import { setFieldValue } from 'segmenthl7tools';
+createHL7Segment(segmentType: string, fields: string[]): string
+```
 
-const segment = "PID|1|12345|SMITH^JOHN";
-const updated = setFieldValue(segment, 2, "67890");
-console.log(updated);
-// Output: "PID|1|67890|SMITH^JOHN"
+Cria uma string de segmento HL7 a partir do tipo e de um array de campos.
+
+```typescript
+createHL7Segment('PID', ['1', '12345', 'SMITH^JOHN', '19800101', 'M'])
+// "PID|1|12345|SMITH^JOHN|19800101|M"
+
+// Campos vazios intermediários são preservados
+createHL7Segment('PID', ['1', '', 'SMITH^JOHN'])
+// "PID|1||SMITH^JOHN"
+
+// Array vazio retorna apenas o tipo
+createHL7Segment('EVN', [])
+// "EVN"
+```
+
+> Lança `Error` se `segmentType` for inválido ou `fields` não for um array.
+
+---
+
+### `validateHL7Segment`
+
+```typescript
+validateHL7Segment(segment: string): boolean
+```
+
+Valida se uma string é um segmento HL7 bem formado. O tipo do segmento deve ter **exatamente 3 caracteres alfanuméricos maiúsculos** (`/^[A-Z0-9]{3}$/`).
+
+| Entrada | Resultado | Motivo |
+|---|---|---|
+| `"MSH\|^~\\&\|APP\|FAC"` | `true` | Tipo válido |
+| `"PID\|1\|12345"` | `true` | Tipo válido |
+| `""` | `false` | String vazia |
+| `"\|APP\|FAC"` | `false` | Sem tipo |
+| `"AB\|campo"` | `false` | Tipo com 2 chars |
+| `"MSSH\|campo"` | `false` | Tipo com 4 chars |
+| `"pid\|campo"` | `false` | Tipo em minúsculas |
+
+---
+
+### `extractFieldValue`
+
+```typescript
+extractFieldValue(segment: string, fieldIndex: number): string | null
+```
+
+Extrai o valor de um campo pelo índice (0-based, onde 0 é o `segmentType`).
+
+- Retorna `''` para campos que **existem mas estão vazios**
+- Retorna `null` para índices **além do range** ou segmento inválido
+
+```typescript
+const seg = 'PID|1|12345|SMITH^JOHN||M'
+
+extractFieldValue(seg, 0)  // "PID"
+extractFieldValue(seg, 3)  // "SMITH^JOHN"
+extractFieldValue(seg, 4)  // "" — campo vazio
+extractFieldValue(seg, 9)  // null — fora do range
+extractFieldValue('', 0)   // null — segmento inválido
+```
+
+---
+
+### `setFieldValue`
+
+```typescript
+setFieldValue(segment: string, fieldIndex: number, value: string): string
+```
+
+Define o valor de um campo específico. Preenche campos intermediários com `''` automaticamente se o índice estiver além do tamanho atual do segmento.
+
+```typescript
+setFieldValue('PID|1|12345|SMITH^JOHN', 2, '99999')
+// "PID|1|99999|SMITH^JOHN"
 
 // Cria campos vazios intermediários se necessário
-const withGap = setFieldValue("PID|1|12345", 5, "M");
-console.log(withGap);
-// Output: "PID|1|12345|||M"
+setFieldValue('PID|1|12345', 5, 'M')
+// "PID|1|12345|||M"
+
+// Altera o tipo do segmento (índice 0)
+setFieldValue('PID|1|12345', 0, 'NK1')
+// "NK1|1|12345"
 ```
 
-## API Reference
-
-### `parseHL7Segment(segment: string): ParsedHL7Segment`
-
-Parseia um segmento HL7 e retorna um objeto com o `segmentType` e campos indexados como `field1`, `field2`, etc.
-
-**Lança:** `Error` se o segmento for uma string vazia, null ou não-string.
+> Lança `Error` se o segmento for inválido ou o índice for negativo.
 
 ---
 
-### `createHL7Segment(segmentType: string, fields: string[]): string`
-
-Cria um segmento HL7 a partir do tipo e campos fornecidos.
-
-**Lança:** `Error` se `segmentType` for inválido ou `fields` não for um array.
-
----
-
-### `validateHL7Segment(segment: string): boolean`
-
-Valida se uma string é um segmento HL7 válido. O tipo do segmento deve ter exatamente 3 caracteres alfanuméricos maiúsculos (`/^[A-Z0-9]{3}$/`).
-
----
-
-### `extractFieldValue(segment: string, fieldIndex: number): string | null`
-
-Extrai o valor de um campo específico pelo índice (0-based).
-
-- Retorna `''` para campos que existem mas estão vazios.
-- Retorna `null` para índices fora do range ou segmento inválido.
-
----
-
-### `setFieldValue(segment: string, fieldIndex: number, value: string): string`
-
-Define o valor de um campo específico. Preenche campos intermediários com `''` se necessário.
-
-**Lança:** `Error` se o segmento for inválido ou o índice for negativo.
-
----
-
-### Tipos exportados
+### Tipos
 
 ```typescript
-import type { HL7Segment, ParsedHL7Segment } from 'segmenthl7tools';
+import type { HL7Segment, ParsedHL7Segment } from 'segmenthl7tools'
+```
 
-// HL7Segment — estrutura para criar segmentos
+```typescript
+/** Estrutura para representar um segmento HL7 */
 interface HL7Segment {
   segmentType: string
   fields: string[]
 }
 
-// ParsedHL7Segment — retorno de parseHL7Segment
+/** Retorno de parseHL7Segment */
 interface ParsedHL7Segment {
   segmentType: string
-  [key: string]: string  // field1, field2, ...fieldN
+  [key: string]: string // field1, field2, ...fieldN
 }
 ```
+
+---
 
 ## Desenvolvimento
 
 ### Pré-requisitos
 
-- Node.js >= 20.0.0
+- Node.js >= 20
 - npm
 
-### Instalação das dependências
+### Setup
 
 ```bash
+git clone https://github.com/igorceranto/segmentHL7Tools.git
+cd segmentHL7Tools
 npm install
 ```
 
-### Scripts disponíveis
+### Scripts
 
-```bash
-# Build do projeto
-npm run build
+| Comando | Descrição |
+|---|---|
+| `npm run build` | Build CJS + ESM + tipos |
+| `npm run dev` | Watch mode |
+| `npm test` | Rodar testes |
+| `npm run test:ui` | Testes com UI interativa |
+| `npm run test:coverage` | Testes com relatório de cobertura |
+| `npm run type-check` | Verificação de tipos TypeScript |
+| `npm run biome:format` | Formatar código |
+| `npm run biome:lint` | Linting |
+| `npm run biome:check` | Lint + format juntos |
+| `npm run release` | Criar e publicar release |
 
-# Desenvolvimento com watch
-npm run dev
-
-# Executar testes
-npm test
-
-# Executar testes com UI interativa
-npm run test:ui
-
-# Verificar cobertura de testes
-npm run test:coverage
-
-# Verificação de tipos TypeScript
-npm run type-check
-
-# Formatação de código com Biome
-npm run biome:format
-
-# Linting com Biome
-npm run biome:lint
-
-# Verificação completa com Biome
-npm run biome:check
-
-# Publicar release
-npm run release
-```
-
-### Hooks do Git (Husky)
-
-- **Pre-commit**: formatação, linting, verificação de tipos e testes
-- **Pre-push**: build completo e testes com cobertura
-
-### Ferramentas de Qualidade
-
-- **Biome**: linting e formatação de código
-- **Husky**: hooks do Git para automação
-- **Vitest**: framework de testes com cobertura (threshold: 80%)
-- **TypeScript**: verificação estática de tipos (strict mode)
-- **GitHub Actions**: CI/CD automatizado
-
-### Estrutura do projeto
+### Estrutura
 
 ```
 src/
@@ -229,43 +272,34 @@ src/
 │   ├── hl7.ts
 │   └── index.ts
 └── index.ts
-
-examples/
-└── basic-usage.ts
-
-.github/
-├── workflows/
-│   └── ci.yml
-└── dependabot.yml
-
-.husky/
-├── pre-commit
-└── pre-push
 ```
 
-## Licença
+### Qualidade
 
-MIT License — veja o arquivo [LICENSE](LICENSE) para detalhes.
+O projeto usa automações para garantir a qualidade do código:
+
+- **Biome** — linting e formatação
+- **Vitest** — testes com threshold de cobertura em 80%
+- **TypeScript strict** — verificação estática de tipos
+- **Husky** — hooks de pre-commit e pre-push
+- **GitHub Actions** — CI/CD em cada push e release
+
+---
 
 ## Contribuição
 
-Contribuições são bem-vindas! Por favor, abra uma issue ou pull request.
+Contribuições são bem-vindas!
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'feat: adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
+1. Faça um fork do projeto
+2. Crie sua branch (`git checkout -b feature/minha-feature`)
+3. Faça commit das mudanças (`git commit -m 'feat: adiciona minha feature'`)
+4. Push para a branch (`git push origin feature/minha-feature`)
 5. Abra um Pull Request
 
-## Suporte
+Bugs e sugestões via [Issues](https://github.com/igorceranto/segmentHL7Tools/issues).
 
-- **Issues:** [GitHub Issues](https://github.com/igorceranto/segmentHL7Tools/issues)
-- **Documentação:** [GitHub README](https://github.com/igorceranto/segmentHL7Tools#readme)
+---
 
-## Links Úteis
+## Licença
 
-- [HL7 Standards](https://www.hl7.org/)
-- [HL7 v2.x Implementation Guide](https://www.hl7.org/implement/standards/)
-- [TypeScript Documentation](https://www.typescriptlang.org/)
-- [Biome Documentation](https://biomejs.dev/)
-- [Husky Documentation](https://typicode.github.io/husky/)
+[MIT](LICENSE) © [ICeranto](https://github.com/igorceranto)
