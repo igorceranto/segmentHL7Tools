@@ -1,11 +1,12 @@
 const SEGMENT_TYPE_REGEX = /^[A-Z0-9]{3}$/
 
 /**
- * Remove o terminador de segmento HL7 (\r, carriage return 0x0D) e
- * espaços em branco nas extremidades, conforme HL7 v2 spec cap. 2.
+ * Remove espaços em branco e o terminador de segmento HL7 (\r, carriage
+ * return 0x0D) das extremidades, conforme HL7 v2 spec cap. 2.
+ * String.prototype.trim() já trata \r como espaço em branco (LineTerminator).
  */
 export function normalizeSegment(segment: string): string {
-  return segment.trim().replace(/\r$/, '').trimEnd()
+  return segment.trim()
 }
 
 /**
