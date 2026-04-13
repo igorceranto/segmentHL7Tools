@@ -34,8 +34,24 @@ describe('extractFieldValue', () => {
       expect(extractFieldValue('PV1|1|I|2000^2012^01', 3)).toBe('2000^2012^01')
     })
 
-    it('deve preservar encoding chars do MSH-1', () => {
-      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 1)).toBe('^~\\&')
+    it('deve retornar o field separator para MSH índice 1 (MSH-1)', () => {
+      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 1)).toBe('|')
+    })
+
+    it('deve retornar encoding chars para MSH índice 2 (MSH-2)', () => {
+      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 2)).toBe('^~\\&')
+    })
+
+    it('deve retornar APP para MSH índice 3 (MSH-3)', () => {
+      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 3)).toBe('APP')
+    })
+
+    it('deve retornar FAC para MSH índice 4 (MSH-4)', () => {
+      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 4)).toBe('FAC')
+    })
+
+    it('deve retornar null para índice além do range em MSH', () => {
+      expect(extractFieldValue('MSH|^~\\&|APP|FAC', 10)).toBe(null)
     })
 
     it('deve remover \\r do final antes de extrair', () => {
@@ -96,8 +112,32 @@ describe('setFieldValue', () => {
       expect(setFieldValue('PID|1|12345', 5, 'M')).toBe('PID|1|12345|||M')
     })
 
-    it('deve definir valor em segmento apenas com tipo', () => {
-      expect(setFieldValue('MSH', 1, '^~\\&')).toBe('MSH|^~\\&')
+    it('deve definir encoding chars em MSH sem campos (índice 2 = MSH-2)', () => {
+      expect(setFieldValue('MSH', 2, '^~\\&')).toBe('MSH|^~\\&')
+    })
+
+    it('deve modificar MSH-2 (encoding chars) via índice 2', () => {
+      expect(setFieldValue('MSH|^~\\&|APP|FAC', 2, '^~\\&#')).toBe(
+        'MSH|^~\\&#|APP|FAC'
+      )
+    })
+
+    it('deve modificar MSH-3 (sending app) via índice 3', () => {
+      expect(setFieldValue('MSH|^~\\&|APP|FAC', 3, 'NEWAPP')).toBe(
+        'MSH|^~\\&|NEWAPP|FAC'
+      )
+    })
+
+    it('deve modificar MSH-4 (sending facility) via índice 4', () => {
+      expect(setFieldValue('MSH|^~\\&|APP|FAC', 4, 'NEWFAC')).toBe(
+        'MSH|^~\\&|APP|NEWFAC'
+      )
+    })
+
+    it('deve criar campos vazios intermediários em MSH se necessário', () => {
+      expect(setFieldValue('MSH|^~\\&|APP', 6, 'DEST')).toBe(
+        'MSH|^~\\&|APP|||DEST'
+      )
     })
 
     it('deve preservar campos não modificados', () => {
