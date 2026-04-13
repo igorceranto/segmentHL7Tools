@@ -46,7 +46,8 @@ export function parseHL7Segment(segment: string): ParsedHL7Segment {
   // O split normal por | não funciona porque MSH-1 e MSH-2 têm semântica
   // diferente dos demais campos.
   if (segmentType === 'MSH') {
-    const fieldSep = normalized[3] ?? '|'
+    // normalized[3] é sempre '|' pois a validação garante segmentType de 3 chars
+    const fieldSep = normalized[3] as string
     const afterId = normalized.slice(4) // tudo após "MSH|"
     const mshFields = afterId.split(fieldSep)
 

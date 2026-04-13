@@ -40,7 +40,8 @@ export function extractFieldValue(
   // em relação ao split simples por '|', pois MSH-1 não é um campo comum.
   if (segmentType === 'MSH') {
     if (fieldIndex === 0) return segmentType
-    const fieldSep = normalized[firstPipe] ?? '|'
+    // normalized[firstPipe] é sempre '|' pois firstPipe é um índice válido
+    const fieldSep = normalized[firstPipe] as string
     if (fieldIndex === 1) return fieldSep
     const fields = normalized.slice(firstPipe + 1).split(fieldSep)
     // índice 2 → fields[0] (MSH-2, encoding chars), índice N → fields[N-2]
@@ -94,7 +95,8 @@ export function setFieldValue(
   // ao split simples, pois MSH-1 é o próprio separador e não ocupa posição
   // no array de split.
   if (segmentType === 'MSH') {
-    const fieldSep = firstPipe !== -1 ? (normalized[firstPipe] ?? '|') : '|'
+    // firstPipe é sempre válido para MSH (segmentType garante 3 chars + pipe)
+    const fieldSep = (normalized[firstPipe] as string | undefined) ?? '|'
     const fields =
       firstPipe !== -1 ? normalized.slice(firstPipe + 1).split(fieldSep) : []
 

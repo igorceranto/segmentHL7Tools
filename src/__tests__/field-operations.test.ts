@@ -140,6 +140,18 @@ describe('setFieldValue', () => {
       )
     })
 
+    it('MSH índice 0: deve reescrever o segmentType mantendo os campos', () => {
+      expect(setFieldValue('MSH|^~\\&|APP|FAC', 0, 'ZSH')).toBe(
+        'ZSH|^~\\&|APP|FAC'
+      )
+    })
+
+    it('MSH índice 1: não altera o field separator, retorna sem mudança', () => {
+      expect(setFieldValue('MSH|^~\\&|APP|FAC', 1, '!')).toBe(
+        'MSH|^~\\&|APP|FAC'
+      )
+    })
+
     it('deve preservar campos não modificados', () => {
       expect(setFieldValue('PID|1|12345|SMITH^JOHN|19800101', 2, '99999')).toBe(
         'PID|1|99999|SMITH^JOHN|19800101'
