@@ -95,9 +95,8 @@ export function setFieldValue(
   // no array de split.
   if (segmentType === 'MSH') {
     const fieldSep = firstPipe !== -1 ? (normalized[firstPipe] ?? '|') : '|'
-    const fields = firstPipe !== -1
-      ? normalized.slice(firstPipe + 1).split(fieldSep)
-      : []
+    const fields =
+      firstPipe !== -1 ? normalized.slice(firstPipe + 1).split(fieldSep) : []
 
     if (fieldIndex === 0) {
       // Reescrever apenas o segmentType, mantendo o restante
