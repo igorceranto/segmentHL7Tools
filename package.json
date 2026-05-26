@@ -30,7 +30,7 @@
     "release": "release-it",
     "prepare": "husky",
     "biome:format": "npx @biomejs/biome format --write ./src",
-    "biome:format:check": "npx @biomejs/biome format --check ./src",
+    "biome:format:check": "npx @biomejs/biome format ./src",
     "biome:lint": "npx @biomejs/biome lint ./src",
     "biome:check": "npx @biomejs/biome check ./src"
   },
