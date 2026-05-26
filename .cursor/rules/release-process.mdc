@@ -1,0 +1,42 @@
+---
+description: Regras de versionamento e release do projeto segmentHL7Tools
+alwaysApply: true
+---
+
+# Release e Versionamento
+
+## SEMPRE usar release-it
+
+**Nunca** crie releases manualmente com `git tag`, `gh release create`, `npm version` ou editando `package.json` diretamente.
+
+**Sempre** oriente o usuário a usar:
+
+```bash
+npm run release
+```
+
+O `release-it` é interativo e precisa ser executado pelo **usuário** no terminal. Se o ambiente não suportar interação (agente automatizado), **instrua o usuário** a rodar o comando manualmente — nunca substitua por comandos avulsos.
+
+## O que o release-it faz automaticamente
+
+1. Executa `npm run build` (hook `before:init`)
+2. Pergunta o tipo de bump (`patch`, `minor`, `major`)
+3. Atualiza `package.json` com a nova versão
+4. Cria commit `chore: release vX.Y.Z`
+5. Cria e pusha a tag `vX.Y.Z`
+6. Cria GitHub Release com notas
+7. Publica no npm (`npm publish`)
+
+## Quando o usuário pedir uma release
+
+❌ ERRADO:
+```bash
+git tag v1.1.0
+gh release create v1.1.0 ...
+npm version minor
+```
+
+✅ CORRETO: informar o usuário para rodar no terminal:
+```bash
+npm run release
+```
