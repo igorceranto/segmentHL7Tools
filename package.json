@@ -34,9 +34,6 @@
     "biome:lint": "npx @biomejs/biome lint ./src",
     "biome:check": "npx @biomejs/biome check ./src"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "keywords": [
     "hl7",
     "segment",
