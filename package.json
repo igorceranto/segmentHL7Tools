@@ -1,5 +1,5 @@
 {
-  "name": "segmenthl7tools",
+  "name": "@igorceranto/segmenthl7tools",
   "version": "1.1.0",
   "description": "Ferramentas para manipulação de segmentos HL7",
   "main": "dist/index.js",
@@ -33,6 +33,9 @@
     "biome:format:check": "npx @biomejs/biome format ./src",
     "biome:lint": "npx @biomejs/biome lint ./src",
     "biome:check": "npx @biomejs/biome check ./src"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   },
   "keywords": [
     "hl7",
