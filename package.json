@@ -52,6 +52,10 @@
     "url": "https://github.com/igorceranto/segmentHL7Tools/issues"
   },
   "homepage": "https://github.com/igorceranto/segmentHL7Tools#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
   "engines": {
     "node": ">=20.0.0"
   },

@@ -25,7 +25,15 @@ O `release-it` é interativo e precisa ser executado pelo **usuário** no termin
 4. Cria commit `chore: release vX.Y.Z`
 5. Cria e pusha a tag `vX.Y.Z`
 6. Cria GitHub Release com notas
-7. Publica no npm (`npm publish`)
+7. Publica no npm público (`registry.npmjs.org`)
+
+## Dual publish (npm + GitHub Packages)
+
+O pacote usa escopo `@igorceranto/...`. O `.npmrc` mapeia esse escopo para GitHub Packages, mas o release local **não** deve publicar lá:
+
+- **`npm run release`** publica em `https://registry.npmjs.org` (via `publishConfig.registry` no `package.json` e `publishArgs` no `.release-it.json`)
+- **GitHub Packages** é publicado automaticamente pelo CI quando a GitHub Release é criada (job `publish` em `.github/workflows/ci.yml`)
+- Para publicar manualmente no GitHub Packages: `npm publish --registry=https://npm.pkg.github.com` (requer PAT com `write:packages` em `~/.npmrc`)
 
 ## Quando o usuário pedir uma release
 
