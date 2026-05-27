@@ -1,6 +1,6 @@
 {
-  "name": "@igorceranto/segmenthl7tools",
-  "version": "2.0.0",
+  "name": "segmenthl7tools",
+  "version": "2.0.1",
   "description": "Ferramentas para manipulação de segmentos HL7",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -52,10 +52,6 @@
     "url": "https://github.com/igorceranto/segmentHL7Tools/issues"
   },
   "homepage": "https://github.com/igorceranto/segmentHL7Tools#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
-  },
   "engines": {
     "node": ">=20.0.0"
   },

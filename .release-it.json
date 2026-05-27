@@ -10,8 +10,7 @@
   },
   "npm": {
     "publish": true,
-    "access": "public",
-    "publishArgs": ["--registry=https://registry.npmjs.org"]
+    "access": "public"
   },
   "hooks": {
     "before:init": "npm run build",

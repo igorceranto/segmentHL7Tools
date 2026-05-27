@@ -1,8 +1,8 @@
 # segmentHL7Tools
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@igorceranto/segmenthl7tools"><img src="https://img.shields.io/npm/v/@igorceranto/segmenthl7tools?color=cb3837&label=npm" alt="npm version" /></a>
-  <a href="https://www.npmjs.com/package/@igorceranto/segmenthl7tools"><img src="https://img.shields.io/npm/dm/@igorceranto/segmenthl7tools?color=cb3837" alt="npm downloads" /></a>
+  <a href="https://www.npmjs.com/package/segmenthl7tools"><img src="https://img.shields.io/npm/v/segmenthl7tools?color=cb3837&label=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/segmenthl7tools"><img src="https://img.shields.io/npm/dm/segmenthl7tools?color=cb3837" alt="npm downloads" /></a>
   <a href="https://github.com/igorceranto/segmentHL7Tools/actions/workflows/ci.yml"><img src="https://github.com/igorceranto/segmentHL7Tools/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="https://codecov.io/gh/igorceranto/segmentHL7Tools"><img src="https://codecov.io/gh/igorceranto/segmentHL7Tools/branch/main/graph/badge.svg" alt="Coverage" /></a>
   <a href="https://github.com/igorceranto/segmentHL7Tools/blob/main/LICENSE"><img src="https://img.shields.io/github/license/igorceranto/segmentHL7Tools" alt="License" /></a>
@@ -35,15 +35,15 @@
 ## Instalação
 
 ```bash
-npm install @igorceranto/segmenthl7tools
+npm install segmenthl7tools
 ```
 
 ```bash
-yarn add @igorceranto/segmenthl7tools
+yarn add segmenthl7tools
 ```
 
 ```bash
-pnpm add @igorceranto/segmenthl7tools
+pnpm add segmenthl7tools
 ```
 
 > Requer **Node.js >= 20**. Compatível com ES Modules e CommonJS.
@@ -59,7 +59,7 @@ import {
   validateHL7Segment,
   extractFieldValue,
   setFieldValue,
-} from '@igorceranto/segmenthl7tools'
+} from 'segmenthl7tools'
 
 // Parsear um segmento
 const parsed = parseHL7Segment('PID|1|12345|SMITH^JOHN|19800101|M')
@@ -206,7 +206,7 @@ setFieldValue('PID|1|12345', 0, 'NK1')
 ### Tipos
 
 ```typescript
-import type { HL7Segment, ParsedHL7Segment } from '@igorceranto/segmenthl7tools'
+import type { HL7Segment, ParsedHL7Segment } from 'segmenthl7tools'
 ```
 
 ```typescript
