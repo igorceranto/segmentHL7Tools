@@ -58,7 +58,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.16",
     "@types/node": "25.9.1",
-    "@vitest/coverage-v8": "4.1.7",
+    "@vitest/coverage-v8": "4.1.10",
     "@vitest/ui": "4.1.7",
     "husky": "9.1.7",
     "release-it": "20.2.0",
